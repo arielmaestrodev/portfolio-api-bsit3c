@@ -21,29 +21,48 @@ enum TokenType {
 
 // Models
 model User {
-  id               String    @id @default(uuid())
-  email            String?   @unique
-  password         String?
-  name             String?
-  emailVerified    DateTime? @map("email_verified") // @map is custom table name
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id            String    @id @default(uuid())
+  email         String?   @unique
+  password      String?
+  name          String?
+  emailVerified DateTime? @map("email_verified") // @map is custom table name
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  role             Role      @default(USER) // default value from enum Role "USER"
-  tokens           Token[]
+  role   Role    @default(USER) // default value from enum Role "USER"
+  tokens Token[]
+  blogs  Blog[]
+
+}
+
+model Blog {
+  id       String   @id @default(uuid())
+  slug     String   @unique
+  title    String
+  excerpt  String
+  content  String   @db.Text
+  category String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
 }
 
 model Token {
-  id         String     @id @default(uuid())
+  id         String    @id @default(uuid())
   type       TokenType
-  token      String     @unique
+  token      String    @unique
   expiresAt  DateTime
-  createdAt  DateTime   @default(now())
+  createdAt  DateTime  @default(now())
   consumedAt DateTime?
   revokedAt  DateTime?
 
-  userId     String
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, type])
 }
