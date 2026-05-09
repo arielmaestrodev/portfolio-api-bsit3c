@@ -9,7 +9,11 @@ export const ENV = {
   JWT_SECRET: process.env.JWT_SECRET || 'fallback_secret_change_me',
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
   BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:8000',
+
+  // AI / Gemini Config
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
   
+  // SMTP Config
   SMTP: {
     HOST: process.env.SMTP_HOST,
     PORT: parseInt(process.env.SMTP_PORT || '587', 10),
